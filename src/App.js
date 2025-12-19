@@ -1,25 +1,33 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useEffect, useState } from "react";
+import api from "./api";
+import StudentForm from "./components/StudentForm";
+import StudentTable from "./components/StudentTable";
+import "./App.css";
+
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+const [students, setStudents] = useState([]);
+const [selected, setSelected] = useState(null);
+
+
+const load = () => {
+api.get("").then(res => setStudents(res.data));
+};
+
+
+useEffect(() => {
+load();
+}, []);
+
+
+return (
+<div className="container">
+<h2>Student Management System</h2>
+<StudentForm selected={selected} refresh={load} clear={() => setSelected(null)} />
+<StudentTable students={students} select={setSelected} refresh={load} />
+</div>
+);
 }
+
 
 export default App;
